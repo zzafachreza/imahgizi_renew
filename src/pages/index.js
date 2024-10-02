@@ -13,8 +13,7 @@ import CATINAnemia from './CATINAnemia';
 import Laporan from './Laporan';
 import Konseling from './Konseling';
 import BantuanSocial from './bantuansocial';
-import Rujukan from './Rujukan';
-
+import Rujukan from './Rujukan'
 
 
 
@@ -37,7 +36,8 @@ export {
   Laporan,
   Konseling,
   BantuanSocial,
-  Rujukan,
+  Rujukan
+
 
 
 

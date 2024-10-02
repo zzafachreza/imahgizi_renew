@@ -91,8 +91,8 @@ export default function BottomNavigator({ state, descriptors, navigation }) {
         if (label === 'Home') {
           iconName = 'log-out';
           Newlabel = '';
-        } else if (label === 'Riwayat') {
-          iconName = 'reload-circle';
+        } else if (label === 'Profile') {
+          iconName = 'person-circle';
           Newlabel = '';
         } else if (label === 'TanyaJawab') {
           iconName = 'chatbubbles-outline';
@@ -147,7 +147,7 @@ export default function BottomNavigator({ state, descriptors, navigation }) {
                  
                 }}>
 
-                <Icon type='ionicon' name={iconName} size={50} color={isFocused ? colors.white : colors.secondary} />
+                <Icon type='ionicon' name={iconName} size={50} color={isFocused ? colors.white : Color.blueGray[400]} />
                 <Text style={{
                   marginTop: 4,
                   fontFamily: fonts.body2.fontFamily,

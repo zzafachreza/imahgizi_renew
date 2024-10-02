@@ -8,6 +8,8 @@ import axios from 'axios';
 import { badutaGiziAPI, ibuhamilkekAPI, MYAPP } from '../../utils/localStorage';
 import { Alert } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
+import MyLoading from '../../components/MyLoading';
+
 
 export default function BadutaGizi({ navigation }) {
     const [kirim, setKirim] = useState({
@@ -31,7 +33,7 @@ export default function BadutaGizi({ navigation }) {
 
     const [filteredDesas, setFilteredDesas] = useState([]); // Desa yang terfilter berdasarkan kecamatan
     const [kecamatanOptions, setKecamatanOptions] = useState([]); // Pilihan kecamatan
-    
+    const [loading, setLoading] = useState(false); // Tambahkan state loading
 
     // Mengambil data kecamatan-desa dari JSON dan menginisiasi state
     useEffect(() => {
@@ -141,13 +143,20 @@ export default function BadutaGizi({ navigation }) {
         };
 
         console.log("Data yang dikirim:", dataToSend);
+        setLoading(true)
 
         axios.post(badutaGiziAPI, dataToSend)
             .then(response => {
+                setLoading(false)
                 console.log('Respons dari server:', response);
                 if (response.data.status === 200) {
                     Alert.alert(MYAPP, "Data berhasil dimasukkan!");
-                    navigation.replace("Laporan");
+                    navigation.replace("Laporan", {
+                        nik: kirim.nikibuayah || "",
+                        namabayi: kirim.namabayi || "",
+                        namaibu: kirim.namaibuayah || "",
+                        kelompok_resiko: "Baduta Gizi Kurang / Gizi Buruk",
+                    });
                 } else {
                     showMessage({
                         type: 'default',
@@ -158,6 +167,7 @@ export default function BadutaGizi({ navigation }) {
                 }
             })
             .catch(error => {
+                setLoading(false)
                 console.error('Terjadi kesalahan dari server:', error);
                 showMessage({
                     type: "default",
@@ -173,6 +183,8 @@ export default function BadutaGizi({ navigation }) {
             <View>
                 <MyHeader title="Baduta Gizi Kurang / Gizi Buruk" />
             </View>
+
+            {loading && <MyLoading />}
 
             <ScrollView>
                 <View style={{ padding: 20 }}>
@@ -240,7 +252,7 @@ export default function BadutaGizi({ navigation }) {
                         onChangeText={(x) => setKirim({ ...kirim, usiaanak: x })} 
                         placeholder="Isi Usia Anak"  
                         label="Usia Anak" 
-                        rightLabel="Minggu" 
+          
                         keyboardType="numeric" 
                     />
                     <MyGap jarak={10} />

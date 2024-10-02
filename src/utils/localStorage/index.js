@@ -32,3 +32,5 @@ export const ibuhamilanemiaAPI = "https://imahgizi.okeadmin.com/api/ibuhamilanem
 export const badutaGiziAPI = "https://imahgizi.okeadmin.com/api/badutagizi";
 export const catinKEKAnemiaAPI = "https://imahgizi.okeadmin.com/api/catinkekanemia";
 export const konselingAPI = "https://imahgizi.okeadmin.com/api/konseling";
+export const bantuanSosialAPI = "https://imahgizi.okeadmin.com/api/bantuansosial";
+export const rujukanAPI = "https://imahgizi.okeadmin.com/api/rujukan";

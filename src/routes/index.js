@@ -88,6 +88,7 @@ const MainApp = () => {
   return (
     <Tab.Navigator initialRouteName='Produk' tabBar={props => <BottomNavigator {...props} />}>
       <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Profile" component={Account} />
 
     </Tab.Navigator>
   );
@@ -95,7 +96,7 @@ const MainApp = () => {
 
 export default function Router() {
   return (
-    <Stack.Navigator initialRouteName='MainApp'>
+    <Stack.Navigator initialRouteName=''>
       <Stack.Screen
         name="Splash"
         component={Splash}
@@ -199,9 +200,8 @@ export default function Router() {
       />
 
 
-
 <Stack.Screen
-        name="Rujukan"
+        name="RujukanScreen"
         component={Rujukan}
         options={{
           headerShown: false,

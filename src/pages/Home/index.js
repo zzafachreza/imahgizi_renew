@@ -23,6 +23,7 @@ import { useToast } from 'react-native-toast-notifications';
 import MyLoading from '../../components/MyLoading';
 
 import { Icon } from 'react-native-elements';
+import { useIsFocused } from '@react-navigation/native';
 
 
 const MyMenu = ({ onPress, img, label, backgroundColor, desc }) => {
@@ -62,16 +63,34 @@ const MyMenu = ({ onPress, img, label, backgroundColor, desc }) => {
 
 export default function Home({ navigation, route }) {
   const [user, setUser] = useState({});
+  const isFocused = useIsFocused(); // Untuk memuat ulang saat fokus pada halaman
+  const [loading, setLoading] = useState(true);
+
 
   const __getUser = () => {
     getData('user').then(u => {
-      setUser(u)
-    })
-  }
+      console.log('Data user dari localStorage:', u); // Tambahkan log ini untuk melihat data user
+      setUser(u);
+      setLoading(false);
+    }).catch(() => {
+      console.error('Gagal mengambil data user:', err); // Jika ada error
+      setLoading(false);
+    });
+  };
 
   useEffect(() => {
-    __getUser();
-  }, [])
+    if (isFocused) {
+      __getUser();
+    }
+  }, [isFocused]);
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
   return (
     <ImageBackground source={require('../../assets/bghome.png')} style={{
       flex: 1,

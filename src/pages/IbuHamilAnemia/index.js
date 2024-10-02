@@ -8,7 +8,7 @@ import axios from 'axios';
 import { ibuhamilanemiaAPI, MYAPP } from '../../utils/localStorage'; // Menggunakan API Ibu Hamil Anemia
 import { Alert } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
-
+import MyLoading from '../../components/MyLoading';
 export default function IbuHamilAnemia({ navigation }) {
     const [kirim, setKirim] = useState({
         namaibu: '',
@@ -28,6 +28,7 @@ export default function IbuHamilAnemia({ navigation }) {
 
     const [filteredDesas, setFilteredDesas] = useState([]); // Desa yang terfilter berdasarkan kecamatan
     const [kecamatanOptions, setKecamatanOptions] = useState([]); // Pilihan kecamatan
+    const [loading, setLoading] = useState(false); // Tambahkan state loading
 
     // Mengambil data kecamatan-desa dari JSON dan menginisiasi state
     useEffect(() => {
@@ -128,14 +129,20 @@ export default function IbuHamilAnemia({ navigation }) {
         };
     
         console.log("Data yang dikirim:", dataToSend);
+        setLoading(true)
     
         // Kirim request dengan axios
         axios.post(ibuhamilanemiaAPI, dataToSend)
             .then(response => {
+                setLoading(false)
                 console.log('Respons dari server:', response);
                 if (response.data.status === 200) {
                     Alert.alert(MYAPP, "Data berhasil dimasukkan!");
-                    navigation.replace("Laporan");
+                    navigation.replace("Laporan",   {
+                        nik: kirim.nik || "",
+                        namaibu: kirim.namaibu || "",
+                        kelompok_resiko: "Ibu Hamil Anemia",
+                    });
                 } else {
                     showMessage({
                         type: 'default',
@@ -146,6 +153,7 @@ export default function IbuHamilAnemia({ navigation }) {
                 }
             })
             .catch(error => {
+                setLoading(false)
                 console.error('Terjadi kesalahan dari server:', error);
                 showMessage({
                     type: "default",
@@ -161,6 +169,8 @@ export default function IbuHamilAnemia({ navigation }) {
             <View>
                 <MyHeader title="Ibu Hamil Anemia" />
             </View>
+
+            {loading && <MyLoading />}
 
             <ScrollView>
                 <View style={{ padding: 20 }}>

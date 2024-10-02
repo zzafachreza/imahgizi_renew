@@ -8,6 +8,8 @@ import axios from 'axios';
 import { catinKEKAnemiaAPI, ibuhamilkekAPI, MYAPP } from '../../utils/localStorage';
 import { Alert } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
+import MyLoading from '../../components/MyLoading';
+
 
 export default function CATINAnemia({ navigation }) {
     const [kirim, setKirim] = useState({
@@ -29,7 +31,7 @@ export default function CATINAnemia({ navigation }) {
 
     const [filteredDesas, setFilteredDesas] = useState([]); // Desa yang terfilter berdasarkan kecamatan
     const [kecamatanOptions, setKecamatanOptions] = useState([]); // Pilihan kecamatan
-
+    const [loading, setLoading] = useState(false);
 
      
 
@@ -140,13 +142,20 @@ export default function CATINAnemia({ navigation }) {
         };
     
         console.log("Data yang dikirim:", dataToSend);
+        setLoading(true)
     
         axios.post(catinKEKAnemiaAPI, dataToSend)
             .then(response => {
                 console.log('Respons dari server:', response);
                 if (response.data.status === 200) {
+                    setLoading(true)
+                    console.log(response.data);
                     Alert.alert(MYAPP, "Data berhasil dimasukkan!");
-                    navigation.replace("Laporan");
+                    navigation.replace("Laporan", {
+                        nik: kirim.nik || "",
+                        namaibu: kirim.namaibu || "",
+                        kelompok_resiko: "CATIN KEK & Anemia",
+                    });
                 } else {
                     showMessage({
                         type: 'default',
@@ -157,6 +166,7 @@ export default function CATINAnemia({ navigation }) {
                 }
             })
             .catch(error => {
+                setLoading(true)
                 console.error('Terjadi kesalahan dari server:', error);
                 showMessage({
                     type: "default",
@@ -172,6 +182,7 @@ export default function CATINAnemia({ navigation }) {
             <View>
                 <MyHeader title="CATIN KEK & Anemia" />
             </View>
+            {loading && <MyLoading/>}
 
             <ScrollView>
                 <View style={{ padding: 20 }}>

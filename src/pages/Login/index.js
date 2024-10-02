@@ -140,7 +140,7 @@ export default function Login ({navigation}) {
                    <View style={{
                     marginTop:60
                    }}>
-                    <TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => navigation.navigate("Register")}>
                         <View>
                         <Text style={{
                         fontFamily:fonts.primary[600],
