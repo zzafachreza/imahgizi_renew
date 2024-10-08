@@ -34,3 +34,4 @@ export const catinKEKAnemiaAPI = "https://imahgizi.okeadmin.com/api/catinkekanem
 export const konselingAPI = "https://imahgizi.okeadmin.com/api/konseling";
 export const bantuanSosialAPI = "https://imahgizi.okeadmin.com/api/bantuansosial";
 export const rujukanAPI = "https://imahgizi.okeadmin.com/api/rujukan";
+export const updateProfileAPI = "https://imahgizi.okeadmin.com/api/updateprofile";

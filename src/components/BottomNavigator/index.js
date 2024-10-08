@@ -89,7 +89,7 @@ export default function BottomNavigator({ state, descriptors, navigation }) {
         let Newlabel = '';
 
         if (label === 'Home') {
-          iconName = 'log-out';
+          iconName = 'home';
           Newlabel = '';
         } else if (label === 'Profile') {
           iconName = 'person-circle';
@@ -147,7 +147,7 @@ export default function BottomNavigator({ state, descriptors, navigation }) {
                  
                 }}>
 
-                <Icon type='ionicon' name={iconName} size={50} color={isFocused ? colors.white : Color.blueGray[400]} />
+                <Icon type='ionicon' name={iconName} size={35} color={isFocused ? colors.white : Color.blueGray[400]} />
                 <Text style={{
                   marginTop: 4,
                   fontFamily: fonts.body2.fontFamily,

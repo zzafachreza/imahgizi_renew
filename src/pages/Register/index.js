@@ -147,7 +147,8 @@ export default function Register({ navigation }) {
                                     value={kirim.nomor_wa}
                                     onChangeText={(x) => setKirim({ ...kirim, nomor_wa: x })}
                                     label="Nomor WhatsApp"
-                                    placeholder="Isi Nomor WhatsApp" />
+                                    placeholder="Isi Nomor WhatsApp"
+                                    keyboardType="numeric" />
                                 <MyGap jarak={10} />
                                 <MyPicker
                                     value={kirim.alamat}

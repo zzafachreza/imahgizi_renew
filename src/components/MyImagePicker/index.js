@@ -19,6 +19,7 @@ export default function MyPickerImage({
       quality: 0.7, // Mengatur kualitas gambar agar tidak terlalu besar
       maxWidth: 800, // Batas ukuran lebar gambar
       maxHeight: 800, // Batas ukuran tinggi gambar
+      includeBase64: true, // Menambahkan opsi ini agar gambar dikonversi ke base64
     };
 
     launchImageLibrary(options, (response) => {
@@ -29,9 +30,12 @@ export default function MyPickerImage({
         console.log('ImagePicker Error: ', response.error);
       } else {
         const imageUri = response.assets[0].uri;
+        const base64Image = `data:${response.assets[0].type};base64,${response.assets[0].base64}`;
         setSelectedImage(imageUri);
+        
+        // Kirim gambar base64 ke parent component
         if (onImagePicked) {
-          onImagePicked(imageUri); // Kirim gambar yang dipilih ke parent component
+          onImagePicked(base64Image); // Gambar dikirim dalam format base64
         }
       }
     });
@@ -59,38 +63,32 @@ export default function MyPickerImage({
             />
           ) : (
             <View style={{
-              alignItems:"center",
-           
-              width:'100%'
+              alignItems: "center",
+              width: '100%',
             }}>
-            <View style={{
-            flexDirection:"row",
-            justifyContent:"center",
-            alignItems:"center",
-            padding:0,
-            backgroundColor:'#D9D9D9',
-            width:"50%",
-            height:40, 
-            borderRadius:5,
-            alignSelf:'center',
-            borderWidth:1,
-            borderColor:Color.blueGray[400]
-           
-            
-
-          }}>
-          <Icon type="ionicon" name="image-outline" size={25} color={colors.white} />
-          <Text style={{
-            fontFamily:fonts.primary[500],
-            fontSize:15, 
-            fontStyle:"italic",
-            left:5,
-            color:colors.white,
-           
-          }}>Unggah Foto</Text>
-          </View>
+              <View style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: 0,
+                backgroundColor: '#D9D9D9',
+                width: "50%",
+                height: 40,
+                borderRadius: 5,
+                alignSelf: 'center',
+                borderWidth: 1,
+                borderColor: Color.blueGray[400]
+              }}>
+                <Icon type="ionicon" name="image-outline" size={25} color={colors.white} />
+                <Text style={{
+                  fontFamily: fonts.primary[500],
+                  fontSize: 15,
+                  fontStyle: "italic",
+                  left: 5,
+                  color: colors.white,
+                }}>Unggah Foto</Text>
+              </View>
             </View>
-         
           )}
         </View>
       </TouchableOpacity>
@@ -117,7 +115,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
-    padding:10
+    padding: 10
   },
   imageSelected: {
     width: 100,
