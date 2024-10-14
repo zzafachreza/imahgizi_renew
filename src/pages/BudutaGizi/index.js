@@ -5,7 +5,7 @@ import { MyCalendar, MyGap, MyHeader, MyInputSecond, MyRadio } from '../../compo
 import MyPickerSecond from '../../components/MyPickerSecond';
 import kecamatanDesa from '../../components/Kecamatan/kecamatan.json';
 import axios from 'axios';
-import { badutaGiziAPI, ibuhamilkekAPI, MYAPP } from '../../utils/localStorage';
+import { apiURL, badutaGiziAPI, ibuhamilkekAPI, MYAPP } from '../../utils/localStorage';
 import { Alert } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 import MyLoading from '../../components/MyLoading';
@@ -21,8 +21,8 @@ export default function BadutaGizi({ navigation }) {
         desa: '',
         usiaanak: '',
         hasilpengukuranbb: '',
-        hasilpengukurantb:'',
-        kelamin:'',
+        hasilpengukurantb: '',
+        kelamin: '',
         waktupendataan: new Date(),
         pendata: '',
         kepemilikan_jamban_sehat: '',
@@ -39,11 +39,11 @@ export default function BadutaGizi({ navigation }) {
     useEffect(() => {
         const uniqueKecamatans = [...new Set(kecamatanDesa.map(item => item.Kecamatan))];
         setKecamatanOptions(uniqueKecamatans);
-    
+
         if (uniqueKecamatans.length > 0) {
             const firstKecamatan = uniqueKecamatans[0];
             setKirim((prevState) => ({ ...prevState, kecamatan: firstKecamatan }));
-            
+
             // Filter desa berdasarkan kecamatan pertama
             const filtered = kecamatanDesa.filter(item => item.Kecamatan === firstKecamatan);
             const desaOptions = filtered.map(item => ({ label: item.Desa, value: item.Desa }));
@@ -94,7 +94,7 @@ export default function BadutaGizi({ navigation }) {
         console.log("Tanggal yang dipilih:", date);
         setKirim((prevState) => ({ ...prevState, waktupendataan: date }));
     };
-    
+
     const handleSimpan = () => {
         // Validasi Input
         const requiredFields = [
@@ -107,7 +107,7 @@ export default function BadutaGizi({ navigation }) {
             { field: kirim.hasilpengukuranbb, message: "Mohon isi Hasil Pengukuran BB!" },
             { field: kirim.hasilpengukurantb, message: "Mohon isi Hasil Pengukuran TB!" },
             { field: kirim.pendata, message: "Mohon isi Pendata!" },
-           
+
         ];
 
         for (let i = 0; i < requiredFields.length; i++) {
@@ -134,18 +134,18 @@ export default function BadutaGizi({ navigation }) {
 
         // Gabungkan kecamatan dan desa menjadi alamat
         const alamat = `${kirim.kecamatan}, ${kirim.desa}`;
-        const formattedDate = new Date(kirim.waktupendataan).toISOString().split('T')[0]; 
+        const formattedDate = new Date(kirim.waktupendataan).toISOString().split('T')[0];
         const dataToSend = {
             ...kirim,
             alamat, // Tambahkan alamat yang berisi kecamatan dan desa
             formattedDate,
-            
+
         };
 
         console.log("Data yang dikirim:", dataToSend);
         setLoading(true)
 
-        axios.post(badutaGiziAPI, dataToSend)
+        axios.post(apiURL + 'badutagizi', dataToSend)
             .then(response => {
                 setLoading(false)
                 console.log('Respons dari server:', response);
@@ -189,145 +189,146 @@ export default function BadutaGizi({ navigation }) {
             <ScrollView>
                 <View style={{ padding: 20 }}>
 
-                    <MyInputSecond 
-                        value={kirim.namaibu} 
-                        onChangeText={(x) => setKirim({ ...kirim, namabayi: x })} 
-                        placeholder="Isi Nama Bayi" 
-                        label="Nama Bayi" 
+                    <MyInputSecond
+                        value={kirim.namaibu}
+                        onChangeText={(x) => setKirim({ ...kirim, namabayi: x })}
+                        placeholder="Isi Nama Bayi"
+                        label="Nama Bayi"
                     />
                     <MyGap jarak={10} />
 
                     <MyPickerSecond value={kirim.kelamin} onValueChange={(x) => {
-                          console.log("Jenis Kelamin yang dipilih:", x);
-                        setKirim({...kirim, kelamin: x})}} label="Jenis Kelamin" data={[
-                        {label: 'Laki-laki', value:'Laki-laki'},
-                        {label: 'Perempuan', value:'Perempuan'}
-                    ]}/>
+                        console.log("Jenis Kelamin yang dipilih:", x);
+                        setKirim({ ...kirim, kelamin: x })
+                    }} label="Jenis Kelamin" data={[
+                        { label: 'Laki-laki', value: 'Laki-laki' },
+                        { label: 'Perempuan', value: 'Perempuan' }
+                    ]} />
                     <MyGap jarak={10} />
 
-                    <MyInputSecond value={kirim.namaibuayah} onChangeText={(x) => setKirim({...kirim,namaibuayah: x})} label="Nama Ibu / Ayah" placeholder="Isi Nama Ibu / Ayah"/>
+                    <MyInputSecond value={kirim.namaibuayah} onChangeText={(x) => setKirim({ ...kirim, namaibuayah: x })} label="Nama Ibu / Ayah" placeholder="Isi Nama Ibu / Ayah" />
                     <MyGap jarak={10} />
 
-                    <MyInputSecond 
-                        value={kirim.nikibuayah} 
-                        onChangeText={(x) => setKirim({ ...kirim, nikibuayah: x })} 
-                        placeholder="Isi NIK Ibu / Ayah" 
+                    <MyInputSecond
+                        value={kirim.nikibuayah}
+                        onChangeText={(x) => setKirim({ ...kirim, nikibuayah: x })}
+                        placeholder="Isi NIK Ibu / Ayah"
                         label="NIK Ibu / Ayah"
                         keyboardType='numeric'
                     />
                     <MyGap jarak={10} />
 
-                    <MyInputSecond 
-                        value={kirim.usiaibu} 
-                        onChangeText={(x) => setKirim({ ...kirim, usiaibu: x })} 
-                        placeholder="Isi Usia Ibu" 
-                        label="Usia Ibu" 
-                        rightLabel="Tahun" 
-                        keyboardType="numeric" 
+                    <MyInputSecond
+                        value={kirim.usiaibu}
+                        onChangeText={(x) => setKirim({ ...kirim, usiaibu: x })}
+                        placeholder="Isi Usia Ibu"
+                        label="Usia Ibu"
+                        rightLabel="Tahun"
+                        keyboardType="numeric"
                     />
                     <MyGap jarak={10} />
 
-                    <MyPickerSecond 
-                        value={kirim.kecamatan} 
-                        data={kecamatanOptions.map(kecamatan => ({ label: kecamatan, value: kecamatan }))} 
+                    <MyPickerSecond
+                        value={kirim.kecamatan}
+                        data={kecamatanOptions.map(kecamatan => ({ label: kecamatan, value: kecamatan }))}
                         onValueChange={(value) => {
                             console.log("Kecamatan yang dipilih:", value);
                             setKirim({ ...kirim, kecamatan: value });
                             handleKecamatanChange(value);
-                        }} 
-                        label="Kecamatan" 
+                        }}
+                        label="Kecamatan"
                     />
                     <MyGap jarak={10} />
 
-                    <MyPickerSecond 
-                        value={kirim.desa} 
-                        data={filteredDesas} 
-                        onValueChange={(x) => setKirim({ ...kirim, desa: x })} 
-                        label="Desa" 
+                    <MyPickerSecond
+                        value={kirim.desa}
+                        data={filteredDesas}
+                        onValueChange={(x) => setKirim({ ...kirim, desa: x })}
+                        label="Desa"
                     />
                     <MyGap jarak={10} />
 
-                    <MyInputSecond 
-                        value={kirim.usiaanak} 
-                        onChangeText={(x) => setKirim({ ...kirim, usiaanak: x })} 
-                        placeholder="Isi Usia Anak"  
-                        label="Usia Anak" 
-          
-                        keyboardType="numeric" 
+                    <MyInputSecond
+                        value={kirim.usiaanak}
+                        onChangeText={(x) => setKirim({ ...kirim, usiaanak: x })}
+                        placeholder="Isi Usia Anak"
+                        label="Usia Anak"
+
+                        keyboardType="numeric"
                     />
                     <MyGap jarak={10} />
 
-                    <MyInputSecond 
-                        value={kirim.hasilpengukuranbb} 
-                        onChangeText={(x) => setKirim({ ...kirim, hasilpengukuranbb: x })} 
-                        placeholder="Isi Hasil Pengukuran BB" 
-                        label="Hasil Pengukuran BB" 
-                        rightLabel="Kg" 
-                        keyboardType="numeric" 
+                    <MyInputSecond
+                        value={kirim.hasilpengukuranbb}
+                        onChangeText={(x) => setKirim({ ...kirim, hasilpengukuranbb: x })}
+                        placeholder="Isi Hasil Pengukuran BB"
+                        label="Hasil Pengukuran BB"
+                        rightLabel="Kg"
+                        keyboardType="numeric"
                     />
                     <MyGap jarak={10} />
 
-                    <MyInputSecond 
-                        value={kirim.hasilpengukurantb} 
-                        onChangeText={(x) => setKirim({ ...kirim, hasilpengukurantb: x })} 
-                        placeholder="Isi Hasil Pengukuran TB" 
-                        label="Hasil Pengukuran TB" 
-                        rightLabel="Cm" 
-                        keyboardType="numeric" 
+                    <MyInputSecond
+                        value={kirim.hasilpengukurantb}
+                        onChangeText={(x) => setKirim({ ...kirim, hasilpengukurantb: x })}
+                        placeholder="Isi Hasil Pengukuran TB"
+                        label="Hasil Pengukuran TB"
+                        rightLabel="Cm"
+                        keyboardType="numeric"
                     />
                     <MyGap jarak={10} />
 
-                    <MyCalendar 
-                        value={kirim.waktupendataan || new Date()} 
-                        onDateChange={handleDateChange} 
-                        label="Waktu Pendataan" 
+                    <MyCalendar
+                        value={kirim.waktupendataan || new Date()}
+                        onDateChange={handleDateChange}
+                        label="Waktu Pendataan"
                     />
                     <MyGap jarak={10} />
 
-                    <MyInputSecond 
-                        value={kirim.pendata} 
-                        onChangeText={(x) => setKirim({ ...kirim, pendata: x })} 
-                        placeholder="Isi Pendata" 
-                        label="Pendata" 
+                    <MyInputSecond
+                        value={kirim.pendata}
+                        onChangeText={(x) => setKirim({ ...kirim, pendata: x })}
+                        placeholder="Isi Pendata"
+                        label="Pendata"
                     />
                     <MyGap jarak={10} />
 
-                   
+
                     <View style={{}}>
                         <MyPickerSecond value={kirim.kelengkapan_imunisasi} onValueChange={(x) => {
                             console.log("Kelengkapan Imunisasi : ", x)
-                            setKirim({...kirim, kelengkapan_imunisasi: x})
+                            setKirim({ ...kirim, kelengkapan_imunisasi: x })
                         }} data={[
-                            {label:'Lengkap', value:'Lengkap'},
-                            {label:'Tidak Lengkap', value:'Tidak Lengkap'}
-                        ]} label="Kelengkapan Imunisasi"/>
-                        
+                            { label: 'Lengkap', value: 'Lengkap' },
+                            { label: 'Tidak Lengkap', value: 'Tidak Lengkap' }
+                        ]} label="Kelengkapan Imunisasi" />
+
                     </View>
-                   
+
                     <MyGap jarak={10} />
 
                     <View style={{}}>
                         <MyPickerSecond value={kirim.kepemilikan_jamban_sehat} onValueChange={(x) => {
                             console.log("Kepemilikan Jamban Sehat : ", x)
-                            setKirim({...kirim, kepemilikan_jamban_sehat: x})
+                            setKirim({ ...kirim, kepemilikan_jamban_sehat: x })
                         }} data={[
-                            {label:'Ya', value:'Ya'},
-                            {label:'Tidak', value:'Tidak'}
-                        ]} label="Kepemilikan Jamban Sehat"/>
-                        
+                            { label: 'Ya', value: 'Ya' },
+                            { label: 'Tidak', value: 'Tidak' }
+                        ]} label="Kepemilikan Jamban Sehat" />
+
                     </View>
                     <MyGap jarak={10} />
 
-                  
+
                     <View style={{}}>
                         <MyPickerSecond value={kirim.keluarga_perokok} onValueChange={(x) => {
                             console.log("Apakah Terdapat Keluarga Perokok di dalam Rumah? : ", x)
-                            setKirim({...kirim, keluarga_perokok: x})
+                            setKirim({ ...kirim, keluarga_perokok: x })
                         }} data={[
-                            {label:'Ya', value:'Ya'},
-                            {label:'Tidak', value:'Tidak'}
-                        ]} label="Apakah Terdapat Keluarga Perokok di dalam Rumah?"/>
-                        
+                            { label: 'Ya', value: 'Ya' },
+                            { label: 'Tidak', value: 'Tidak' }
+                        ]} label="Apakah Terdapat Keluarga Perokok di dalam Rumah?" />
+
                     </View>
                     <MyGap jarak={10} />
 
@@ -335,12 +336,12 @@ export default function BadutaGizi({ navigation }) {
                     <View style={{}}>
                         <MyPickerSecond value={kirim.kepemilikan_jkn} onValueChange={(x) => {
                             console.log("Kepemilikan JKN : ", x)
-                            setKirim({...kirim, kepemilikan_jkn: x})
+                            setKirim({ ...kirim, kepemilikan_jkn: x })
                         }} data={[
-                            {label:'Ya', value:'Ya'},
-                            {label:'Tidak', value:'Tidak'}
-                        ]} label="Kepemilikan JKN"/>
-                        
+                            { label: 'Ya', value: 'Ya' },
+                            { label: 'Tidak', value: 'Tidak' }
+                        ]} label="Kepemilikan JKN" />
+
                     </View>
                     <MyGap jarak={10} />
 

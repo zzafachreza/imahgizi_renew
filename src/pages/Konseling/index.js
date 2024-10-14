@@ -7,14 +7,15 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { useRoute } from '@react-navigation/native'
 import { showMessage } from 'react-native-flash-message'
 import axios from 'axios'
-import { konselingAPI, MYAPP } from '../../utils/localStorage'
+import { apiURL, konselingAPI, MYAPP } from '../../utils/localStorage'
 import MyLoading from '../../components/MyLoading'
 
 
 
 export default function Konseling({ navigation }) {
   const route = useRoute();
-  
+  console.log(route.params)
+
   // Pastikan nama parameter sesuai
   const kelompokResiko = route.params.kelompok_resiko || "Tidak ada";
   const nik = route.params.nik || "/";
@@ -64,13 +65,13 @@ export default function Konseling({ navigation }) {
     setLoading(true);
 
     axios
-      .post(konselingAPI, dataToSend)
+      .post(apiURL + 'konseling', dataToSend)
       .then(response => {
         setLoading(false)
         console.log(response.data);
         if (response.data.status === 200) {
           console.log(response.data)
-          Alert.alert(MYAPP,"Data berhasil disimpan!");
+          Alert.alert(MYAPP, "Data berhasil disimpan!");
           navigation.replace("MainApp"); // Bisa kembalikan ke halaman sebelumnya atau halaman yang diinginkan
         } else {
           showMessage({
@@ -128,7 +129,7 @@ export default function Konseling({ navigation }) {
           <MyGap jarak={10} />
 
           <MyPickerImage onImagePicked={(x) => setKirim({ ...kirim, foto: x })} label="Unggah Foto" />
-          
+
           <View>
             <TouchableWithoutFeedback onPress={handleSimpan}>
               <View style={{

@@ -7,12 +7,12 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useRoute } from '@react-navigation/native';
 import { showMessage } from 'react-native-flash-message';
 import axios from 'axios';
-import { bantuanSosialAPI, MYAPP } from '../../utils/localStorage';
+import { apiURL, bantuanSosialAPI, MYAPP } from '../../utils/localStorage';
 import MyLoading from '../../components/MyLoading';
 
 export default function BantuanSosial({ navigation }) {
   const route = useRoute();
-  
+
   // Mengambil parameter dari route jika ada, atau default
   const kelompokResiko = route.params?.kelompok_resiko || "Tidak ada";
   const nik = route.params?.nik || "/";
@@ -65,7 +65,7 @@ export default function BantuanSosial({ navigation }) {
     setLoading(true)
 
     axios
-      .post(bantuanSosialAPI, dataToSend)
+      .post(apiURL + 'bantuansosial', dataToSend)
       .then(response => {
         setLoading(false)
         console.log(response.data);
@@ -155,7 +155,7 @@ export default function BantuanSosial({ navigation }) {
           </View>
         </View>
       </ScrollView>
-          {loading && <MyLoading />} 
+      {loading && <MyLoading />}
     </SafeAreaView>
   );
 }

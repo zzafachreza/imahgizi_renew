@@ -76,7 +76,7 @@ export default function Profile({ navigation }) {
 
                     <Text style={styles.label}>Nomor WhatsApp</Text>
                     <View style={styles.inputBox}>
-                        <Text style={styles.value}>{user.nomor_wa}</Text>
+                        <Text style={styles.value}>{user.telepon}</Text>
                     </View>
 
                     <Text style={styles.label}>Alamat Lengkap</Text>
@@ -91,30 +91,30 @@ export default function Profile({ navigation }) {
 
                     <MyGap jarak={10} />
 
-                   <View style={{
-                    
-                   }}>
-                   <MyButton
-                        title="Edit Profil"
-                        warna={colors.primary}
-                        onPress={() => navigation.navigate('AccountEdit', user)}
-                    />
-                    <MyGap jarak={20} />
-                    <MyButton
-                        title="Keluar"
-                        warna={Color.blueGray[500]}
-                        onPress={btnKeluar}
-                    />
-                   </View>
+                    <View style={{
 
-                   <View style={{
-                    padding:10,
-                    marginBottom:20
-                   }}>
+                    }}>
+                        <MyButton
+                            title="Edit Profil"
+                            warna={colors.primary}
+                            onPress={() => navigation.navigate('AccountEdit', user)}
+                        />
+                        <MyGap jarak={20} />
+                        <MyButton
+                            title="Keluar"
+                            warna={Color.blueGray[500]}
+                            onPress={btnKeluar}
+                        />
+                    </View>
 
-                   </View>
+                    <View style={{
+                        padding: 10,
+                        marginBottom: 20
+                    }}>
 
-                
+                    </View>
+
+
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         marginVertical: 10,
-        padding:0
+        padding: 0
     },
     label: {
         fontSize: 16,

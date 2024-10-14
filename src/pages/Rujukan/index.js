@@ -7,21 +7,21 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import MyPickerSecond from '../../components/MyPickerSecond'
 import MyLoading from '../../components/MyLoading'
 import { useRoute } from '@react-navigation/native'
-import { MYAPP, rujukanAPI } from '../../utils/localStorage'
+import { apiURL, MYAPP, rujukanAPI } from '../../utils/localStorage'
 import { showMessage } from 'react-native-flash-message'
 import axios from 'axios'
 
 
-export default function Rujukan({navigation}) {
+export default function Rujukan({ navigation }) {
   const route = useRoute();
 
-   // Ambil data dari route params
-   const kelompokResiko = route.params?.kelompok_resiko || "Tidak ada";
-   const nik = route.params?.nik || "/";
-   const namaBayi = route.params?.namabayi || "/";
-   const namaIbu = route.params?.namaibu || "/";
+  // Ambil data dari route params
+  const kelompokResiko = route.params?.kelompok_resiko || "Tidak ada";
+  const nik = route.params?.nik || "/";
+  const namaBayi = route.params?.namabayi || "/";
+  const namaIbu = route.params?.namaibu || "/";
 
-   const [kirim, setKirim] = useState({
+  const [kirim, setKirim] = useState({
     kepemilikan_jkn: '',
     jenis_jkn: 'BPJS', // Default value
     riwayat_penyakit: '',
@@ -32,7 +32,7 @@ export default function Rujukan({navigation}) {
   });
 
   const [loading, setLoading] = useState(false);
-  
+
   const handleDateChange = (date) => {
     console.log('Tanggal yang dipilih:', date);
     setKirim((prevState) => ({ ...prevState, waktukegiatan: date }));
@@ -72,14 +72,14 @@ export default function Rujukan({navigation}) {
     console.log("Data yang dikirim:", dataToSend);
     setLoading(true)
     axios
-      .post(rujukanAPI, dataToSend)
+      .post(apiURL + 'rujukan', dataToSend)
       .then(response => {
         setLoading(false);
         console.log(response.data)
         if (response.data.status === 200) {
           console.log(response.data)
           Alert.alert(MYAPP, "Data berhasil disimpan!");
-          navigation.replace("MainApp");
+          // navigation.replace("MainApp");
         } else {
           showMessage({
             message: "Gagal menyimpan data, coba lagi!",
@@ -103,78 +103,78 @@ export default function Rujukan({navigation}) {
 
   return (
     <SafeAreaView style={{
-        flex:1,
-        backgroundColor:colors.white
+      flex: 1,
+      backgroundColor: colors.white
     }}>
       <View>
-        <MyHeader title="Rujukan"/>
+        <MyHeader title="Rujukan" />
       </View>
 
-      {loading && <MyLoading/>}
+      {loading && <MyLoading />}
 
 
       <ScrollView>
         <View style={{
-            padding:20,
+          padding: 20,
 
         }}>
 
-      
-        <MyCalendar value={kirim.waktukegiatan || new Date()} onDateChange={handleDateChange} placeholder="Pilih Tanggal" label="Waktu Kegiatan"/>
-        <MyGap jarak={10}/>
 
-        <MyInputSecond value={kirim.kepemilikan_jkn} 
-        onChangeText={(X) => setKirim({...kirim,kepemilikan_jkn: X})}
-        placeholder="Isi Kepemilikan JKN" label="Kepemilikan JKN"/>
-        <MyGap jarak={10}/>
+          <MyCalendar value={kirim.waktukegiatan || new Date()} onDateChange={handleDateChange} placeholder="Pilih Tanggal" label="Waktu Kegiatan" />
+          <MyGap jarak={10} />
 
-        <MyPickerSecond  value={kirim.jenis_jkn}  data={[
-            {label: 'BPJS', value: 'BPJS'},
-            {label: 'KIS', value: 'KIS'},
-            {label: 'Lainnya', value: 'Lainnya'},
+          <MyInputSecond value={kirim.kepemilikan_jkn}
+            onChangeText={(X) => setKirim({ ...kirim, kepemilikan_jkn: X })}
+            placeholder="Isi Kepemilikan JKN" label="Kepemilikan JKN" />
+          <MyGap jarak={10} />
 
-        ]} 
-        onValueChange={(X) => setKirim({...kirim, jenis_jkn: X})}
-        
-        label="Jenis JKN"/>
-        <MyGap jarak={10}/>
+          <MyPickerSecond value={kirim.jenis_jkn} data={[
+            { label: 'BPJS', value: 'BPJS' },
+            { label: 'KIS', value: 'KIS' },
+            { label: 'Lainnya', value: 'Lainnya' },
+
+          ]}
+            onValueChange={(X) => setKirim({ ...kirim, jenis_jkn: X })}
+
+            label="Jenis JKN" />
+          <MyGap jarak={10} />
 
 
-        <MyInputSecond value={kirim.riwayat_penyakit}
-         onChangeText={(x) => setKirim({...kirim,riwayat_penyakit: x})}
-         placeholder="Isi Riwayat Penyakit" label="Riwayat Penyakit"/>
-        <MyGap jarak={10}/>
+          <MyInputSecond value={kirim.riwayat_penyakit}
+            onChangeText={(x) => setKirim({ ...kirim, riwayat_penyakit: x })}
+            placeholder="Isi Riwayat Penyakit" label="Riwayat Penyakit" />
+          <MyGap jarak={10} />
 
-        <MyInputSecond value={kirim.fasilitas_rujukan}
-          onChangeText={(x) => setKirim({...kirim, fasilitas_rujukan: x})}
-         placeholder="Isi Fasilitas yang Dijadikan Rujukan" label="Fasilitas yang Dijadikan Rujukan"/>
-        <MyGap jarak={10}/>
+          <MyInputSecond value={kirim.fasilitas_rujukan}
+            onChangeText={(x) => setKirim({ ...kirim, fasilitas_rujukan: x })}
+            placeholder="Isi Fasilitas yang Dijadikan Rujukan" label="Fasilitas yang Dijadikan Rujukan" />
+          <MyGap jarak={10} />
 
-        <MyInputSecond value={kirim.pendata}
-        onChangeText={(x) => setKirim({...kirim,pendata : x})} 
-         placeholder="Isi Pendata" label="Pendata"/>
-        <MyGap jarak={10}/>
+          <MyInputSecond value={kirim.pendata}
+            onChangeText={(x) => setKirim({ ...kirim, pendata: x })}
+            placeholder="Isi Pendata" label="Pendata" />
+          <MyGap jarak={10} />
 
-        <MyPickerImage onImagePicked={(x) => setKirim({...kirim, foto: x})} label="Unggah Foto"/>
-        
-        <View>
-          <TouchableWithoutFeedback onPress={handleSimpan}>
-            <View style={{
-              padding:10,
-              backgroundColor:colors.primary,
-              borderRadius:30,
+          <MyPickerImage onImagePicked={(x) => setKirim({ ...kirim, foto: x })} label="Unggah Foto" />
 
-            }}>
-              <Text style={{
-                color:colors.white,
-                textAlign:"center",
-                fontFamily:fonts.primary[600],
-                fontSize:15,
+          <View>
+            <TouchableWithoutFeedback onPress={handleSimpan}>
+              <View style={{
+                padding: 10,
+                backgroundColor: colors.primary,
+                borderRadius: 30,
 
-              }}>Simpan</Text>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
+              }}>
+                <Text style={{
+                  color: colors.white,
+                  textAlign: "center",
+                  fontFamily: fonts.primary[600],
+                  fontSize: 15,
+
+                }}>Simpan</Text>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
 
         </View>
       </ScrollView>

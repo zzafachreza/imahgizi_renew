@@ -15,7 +15,7 @@ import { getData } from '../../utils/localStorage';
 export default function Laporan({ navigation, route }) {
   const [user, setUser] = useState({});
   const kelompok_resiko = route.params?.kelompok_resiko || '/'; // Ambil kelompok resiko dari route params
-
+  console.log(route.params)
   // Ambil data user
   const __getUser = () => {
     getData('user').then(u => {
@@ -54,30 +54,30 @@ export default function Laporan({ navigation, route }) {
           {/* MENU */}
           <View style={styles.menuContainer}>
             {/* Konseling */}
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('Konseling', { 
-    nik: route.params.nik,          // Pastikan ini 'nik' dengan huruf kecil
-    namaibu: route.params.namaibu,
-    namabayi: route.params.namabayi,
-    kelompok_resiko: route.params.kelompok_resiko
-})}>
-  <View style={styles.menuItem}>
-    <View style={styles.iconContainer}>
-      <Image style={styles.icon} source={require('../../assets/icon_konseling.png')} />
-    </View>
-    <View style={styles.textContainer}>
-      <Text style={styles.menuText}>Konseling</Text>
-    </View>
-  </View>
-</TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('Konseling', {
+              nik: route.params.nik,          // Pastikan ini 'nik' dengan huruf kecil
+              namaibu: route.params.namaibu,
+              namabayi: route.params.namabayi,
+              kelompok_resiko: route.params.kelompok_resiko
+            })}>
+              <View style={styles.menuItem}>
+                <View style={styles.iconContainer}>
+                  <Image style={styles.icon} source={require('../../assets/icon_konseling.png')} />
+                </View>
+                <View style={styles.textContainer}>
+                  <Text style={styles.menuText}>Konseling</Text>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
 
 
             {/* Bantuan Sosial */}
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('BantuanSocial', { 
-    nik: route.params.nik,          // Pastikan ini 'nik' dengan huruf kecil
-    namaibu: route.params.namaibu,
-    namabayi: route.params.namabayi,
-    kelompok_resiko: route.params.kelompok_resiko
-})}>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('BantuanSocial', {
+              nik: route.params.nik,          // Pastikan ini 'nik' dengan huruf kecil
+              namaibu: route.params.namaibu,
+              namabayi: route.params.namabayi,
+              kelompok_resiko: route.params.kelompok_resiko
+            })}>
               <View style={styles.menuItem}>
                 <View style={styles.iconContainer}>
                   <Image style={styles.icon} source={require('../../assets/icon_bantuan_sosial.png')} />
@@ -90,10 +90,10 @@ export default function Laporan({ navigation, route }) {
 
             {/* Rujukan */}
             <TouchableWithoutFeedback onPress={() => navigation.navigate('RujukanScreen', {
-               nik: route.params.nik,          // Pastikan ini 'nik' dengan huruf kecil
-    namaibu: route.params.namaibu,
-    namabayi: route.params.namabayi,
-    kelompok_resiko: route.params.kelompok_resiko
+              nik: route.params.nik,          // Pastikan ini 'nik' dengan huruf kecil
+              namaibu: route.params.namaibu,
+              namabayi: route.params.namabayi,
+              kelompok_resiko: route.params.kelompok_resiko
             })}>
               <View style={styles.menuItem}>
                 <View style={styles.iconContainer}>
@@ -183,12 +183,12 @@ const styles = StyleSheet.create({
   icon: {
     width: 53,
     height: 53,
-    top:4
+    top: 4
   },
   iconLarge: {
     width: 59,
     height: 59,
-    top:5
+    top: 5
   },
   textContainer: {
     left: -5
@@ -198,13 +198,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.white,
     textAlign: 'center',
-    left:30
+    left: 30
   },
   menuTextLarge: {
     fontFamily: fonts.primary[700],
     fontSize: 20,
     color: colors.white,
     textAlign: 'left',
-    left:27
+    left: 27
   }
 });

@@ -7,10 +7,11 @@ import { MyGap, MyInput, MyPicker } from '../../components';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { showMessage } from 'react-native-flash-message';
 import axios from 'axios';
-import { loginAPI, MYAPP, registerAPI, storeData } from '../../utils/localStorage';
+import { api_token, apiURL, loginAPI, MYAPP, registerAPI, storeData } from '../../utils/localStorage';
 
 export default function Register({ navigation }) {
     const [kirim, setKirim] = useState({
+        api_token: api_token,
         nama_lengkap: '',
         username: '',
         nomor_wa: '',
@@ -83,10 +84,11 @@ export default function Register({ navigation }) {
 
     const handleRegisterAPI = () => {
         axios
-            .post(registerAPI, kirim)
+            .post(apiURL + '/register', kirim)
             .then(response => {
+                console.log(response.data);
                 if (response.data.status === 200) {
-                    console.log(response.data);
+
                     storeData('user', kirim);
                     navigation.replace("Login");
                     Alert.alert(MYAPP, "Selamat!, Anda berhasil daftar!");
@@ -95,7 +97,7 @@ export default function Register({ navigation }) {
                         type: 'default',
                         color: 'white',
                         backgroundColor: colors.danger,
-                        message: "Sudah ada akun"
+                        message: response.data.message
                     });
                 } else {
                     showMessage({
@@ -158,6 +160,7 @@ export default function Register({ navigation }) {
                                 />
                                 <MyGap jarak={10} />
                                 <MyInput
+                                    secureTextEntry={true}
                                     value={kirim.password}
                                     onChangeText={(x) => setKirim({ ...kirim, password: x })}
                                     label="Kata Sandi"
